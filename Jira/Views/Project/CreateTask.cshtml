@@ -1,0 +1,30 @@
+﻿@model TaskJira;
+@{
+    Layout = "_ProjectLayout";
+}
+
+
+<form asp-action="CreateTask" >
+
+    <div asp-validation-summary="All"></div>
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label asp-for="State"></label>
+        <select name="temp">
+            @foreach (var state in (ViewBag.TaskStates as List<TaskState>)) 
+            {
+                <option value="@state.Id">@state.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name" />
+    </div>
+    <div>
+        <button  type="submit">Сохранить</button>
+    </div>
+    <a asp-action="Projects">Отмена</a>
+</form>
+

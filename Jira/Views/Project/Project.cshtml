@@ -1,0 +1,30 @@
+﻿@model Project;
+@{
+
+    Layout = "_ProjectLayout";
+}
+<body>
+    <p>
+        @Model.Name
+    </p>
+    <div>
+        @foreach (var taskState in Model.TaskStates)
+        {
+            @taskState.Name
+            if (taskState.TasksJira != null)
+            {
+                foreach (var task in taskState.TasksJira)
+                {
+                    <span>@task.Name</span>
+                }
+            }
+        }
+    </div>
+    <a asp-action="CreateTask" asp-controller="Project" asp-route-projectId="@Model.Id">Выйти</a>
+</body>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

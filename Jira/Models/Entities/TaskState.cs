@@ -12,5 +12,9 @@ namespace Jira.Models.Entities
 		public int Id { get; set; }
 
 		public string Name { get; set; }
-}
+
+		public List<TaskJira> TasksJira { get; set; }
+
+		public Project Project { get; set; }
+	}
 }

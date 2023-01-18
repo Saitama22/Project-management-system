@@ -30,15 +30,14 @@ namespace Jira
 			app.UseRouting();
 			app.UseStaticFiles();
 			app.UseStatusCodePages();
-			app.UseAuthentication();
-			app.UseAuthorization();
+			//app.UseAuthentication();
+			//app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapGet("/", async context =>
-				{
-					await context.Response.WriteAsync("Hello World!");
-				});
+				endpoints.MapControllerRoute(
+					name: "default",
+					pattern: "{controller=Project}/{Action=Projects}");
 			});
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using Jira.Models.Intarfaces.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Jira.Models.Intarfaces.Entities;
 
 namespace Jira.Models.Entities
 {
@@ -9,7 +10,5 @@ namespace Jira.Models.Entities
 		public string Name { get; set; }
 
 		public TaskState State { get; set; }
-
-		public Project Project { get; set; }
 	}
 }

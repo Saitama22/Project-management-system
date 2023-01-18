@@ -4,14 +4,16 @@ using Jira.Models.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Jira.Migrations
 {
     [DbContext(typeof(JiraDbContext))]
-    partial class JiraDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230114164911_ProjectLTs")]
+    partial class ProjectLTs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,10 +46,15 @@ namespace Jira.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("StateId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("StateId");
 
@@ -76,30 +83,31 @@ namespace Jira.Migrations
 
             modelBuilder.Entity("Jira.Models.Entities.TaskJira", b =>
                 {
+                    b.HasOne("Jira.Models.Entities.Project", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId");
+
                     b.HasOne("Jira.Models.Entities.TaskState", "State")
-                        .WithMany("TasksJira")
+                        .WithMany()
                         .HasForeignKey("StateId");
+
+                    b.Navigation("Project");
 
                     b.Navigation("State");
                 });
 
             modelBuilder.Entity("Jira.Models.Entities.TaskState", b =>
                 {
-                    b.HasOne("Jira.Models.Entities.Project", "Project")
+                    b.HasOne("Jira.Models.Entities.Project", null)
                         .WithMany("TaskStates")
                         .HasForeignKey("ProjectId");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Jira.Models.Entities.Project", b =>
                 {
-                    b.Navigation("TaskStates");
-                });
+                    b.Navigation("Tasks");
 
-            modelBuilder.Entity("Jira.Models.Entities.TaskState", b =>
-                {
-                    b.Navigation("TasksJira");
+                    b.Navigation("TaskStates");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,3 +3,4 @@
 */bin
 /.vs
 */.vs
+/Jira/wwwroot/lib/twitter-bootstrap

@@ -9,6 +9,6 @@ namespace Jira.Models.Entities
 
 		public string Name { get; set; }
 
-		public List<TaskJira> Tasks { get; set; }
+		public List<TaskState> TaskStates { get; set; }
 	}
 }
