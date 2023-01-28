@@ -18,17 +18,6 @@ namespace Jira.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Create()
-		{
-			return View();
-		}
-
-		[HttpPost]
-		public async Task Create(Project project)
-		{
-			await _projectHandler.CreateOrUpdateAsync(project);
-		}
-
 		public IActionResult Projects()
 		{
 			var projects = _projectHandler.GetAllProjects();
@@ -36,7 +25,8 @@ namespace Jira.Controllers
 			return View(projects);
 		}
 
-		public async Task<IActionResult> Project(int projectId)	
+		[HttpGet]
+		public async Task<IActionResult> ProjectAsync(int projectId)	
 		{
 			var project = await _projectHandler.GetProjectAsync(projectId);
 			if (project == null)
@@ -44,11 +34,16 @@ namespace Jira.Controllers
 			return View(project);
 		}
 
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View();
+		}
+
 		[HttpPost]
-		public async Task CreateTask(TaskJira taskJira)
-		{			
-			var taskStateId = int.Parse(Request.Form["temp"]);
-				await _projectHandler.CreateTaskAsync(taskJira, taskStateId);
+		public async Task CreateAsync(Project project)
+		{
+			await _projectHandler.CreateOrUpdateAsync(project);
 		}
 
 		[HttpGet]
@@ -57,6 +52,26 @@ namespace Jira.Controllers
 			var project = await _projectHandler.GetProjectAsync(projectId);
 			ViewBag.TaskStates = project.TaskStates;
 			return View();
+		}
+
+		[HttpPost]
+		public async Task CreateTaskAsync(TaskJira taskJira)
+		{			
+			var taskStateId = int.Parse(Request.Form["temp"]);
+			await _projectHandler.CreateTaskAsync(taskJira, taskStateId);
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> CreateTaskStateAsync()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public async Task CreateTaskStateAsync(TaskJira taskJira)
+		{
+			
 		}
 
 	}

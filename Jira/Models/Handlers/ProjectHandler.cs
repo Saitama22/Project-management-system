@@ -33,13 +33,17 @@ namespace Jira.Models.Handlers
 
 		public IQueryable<Project> GetAllProjects()
 		{
-			return _projectRepo.Records;
+			return _projectRepo.Records ?? new List<Project>().AsQueryable();
 		}
 
 		public async Task<Project> GetProjectAsync(int projectId)
 		{
 			var project = await _projectRepo.GetByIdAsync(projectId);
 			project.TaskStates ??= new();
+			foreach (var taskStates in project.TaskStates)
+			{
+				taskStates.TasksJira ??= new();
+			}
 			return project;
 		}
 

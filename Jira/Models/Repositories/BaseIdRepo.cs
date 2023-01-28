@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Jira.Models.DbContexts;
+using Jira.Models.Intarfaces.DbContexts;
 using Jira.Models.Intarfaces.Entities;
 using Jira.Models.Intarfaces.Repositories;
 using Microsoft.EntityFrameworkCore;

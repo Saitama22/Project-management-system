@@ -1,5 +1,8 @@
-﻿using Jira.Models.DbContexts;
+﻿using System;
+using System.Linq;
+using Jira.Models.DbContexts;
 using Jira.Models.Handlers;
+using Jira.Models.Intarfaces.DbContexts;
 using Jira.Models.Intarfaces.Handlers;
 using Jira.Models.Intarfaces.Repositories;
 using Jira.Models.Repositories;
@@ -22,6 +25,7 @@ namespace Jira
 		private static IServiceCollection AddDbContext(this IServiceCollection services)
 		{
 			services.AddDbContext<JiraDbContext>();
+		//	services.AddScoped<JiraDbContext, RealJiraDbContext>();
 			return services;
 		}
 
@@ -38,5 +42,17 @@ namespace Jira
 			services.AddScoped<IProjectHandler, ProjectHandler>();
 			return services;
 		}
+		public static IServiceCollection RemoveService<T>(this IServiceCollection services)
+		{
+			if (services.IsReadOnly)
+			{
+				throw new Exception($"{nameof(services)} is read only");
+			}
+
+			var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(T));
+			if (serviceDescriptor != null) services.Remove(serviceDescriptor);
+
+			return services;
+		}		
 	}
 }
