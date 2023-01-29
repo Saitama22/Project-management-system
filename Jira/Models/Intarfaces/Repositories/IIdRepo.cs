@@ -10,6 +10,6 @@ namespace Jira.Models.Intarfaces.Repositories
 
 		Task<T> GetByIdAsync(int id);
 
-		Task DeleteAsync(int id);
+		Task DeleteByIdAsync(int id);
 	}
 }

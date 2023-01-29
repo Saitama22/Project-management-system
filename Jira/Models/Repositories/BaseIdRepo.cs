@@ -44,14 +44,16 @@ namespace Jira.Models.Repositories
 			await Context.SaveChangesAsync();
 		}
 
-		public Task DeleteAsync(int id)
+		public async Task DeleteByIdAsync(int id)
 		{
-			throw new NotImplementedException();
+			var entity = await GetByIdAsync(id);
+			await DeleteAsync(entity);
 		}
 
-		public Task DeleteAsync(T entity)
+		public async Task DeleteAsync(T entity)
 		{
-			throw new NotImplementedException();
+			await Task.Run(() => MainDbSet.Remove(entity));
+			await Context.SaveChangesAsync();
 		}
 
 		public virtual async Task<T> GetByIdAsync(int id)

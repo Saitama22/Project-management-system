@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Jira\Jira.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HandlersTests\" />
+  </ItemGroup>
+
 </Project>
