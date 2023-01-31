@@ -1,0 +1,27 @@
+﻿@model Project;
+@{
+
+    Layout = "_ProjectLayout";
+}
+<body>
+    <h2>
+        @Model.Name
+    </h2>
+    <table style="width:100%">
+        @foreach (var taskState in Model.TaskStates)
+        {
+            <tr>
+                <th>@taskState.Name</th>
+            </tr>
+
+            <tr>
+                @foreach (var taskJira in taskState.TasksJira)
+                {
+                    <td>@taskJira.Name</td>
+                }
+            </tr>
+        }
+    </table>
+    <a asp-action="CreateTask" asp-controller="Project" asp-route-projectId="@Model.Id">Добавить задачу</a>
+</body>
+
