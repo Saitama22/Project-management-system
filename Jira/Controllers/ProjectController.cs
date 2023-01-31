@@ -61,7 +61,6 @@ namespace Jira.Controllers
 			await _projectHandler.CreateTaskAsync(taskJira, taskStateId);
 		}
 
-
 		[HttpGet]
 		public async Task<IActionResult> CreateTaskStateAsync()
 		{
@@ -73,6 +72,5 @@ namespace Jira.Controllers
 		{
 			
 		}
-
 	}
 }

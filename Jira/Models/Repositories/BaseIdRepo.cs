@@ -20,7 +20,7 @@ namespace Jira.Models.Repositories
 		protected JiraDbContext Context { get; private set; }
 		protected abstract DbSet<T> MainDbSet { get; }
 
-		public IQueryable<T> Records => MainDbSet;
+		public IQueryable<T> Records => MainDbSet.ToList().AsQueryable();
 
 		public async Task CreateOrUpdateAsync(IList<T> entities)
 		{
@@ -52,7 +52,11 @@ namespace Jira.Models.Repositories
 
 		public async Task DeleteAsync(T entity)
 		{
-			await Task.Run(() => MainDbSet.Remove(entity));
+			//await Task.Run(() => MainDbSet.Remove(entity));
+			MainDbSet.Remove(entity);
+			
+			
+			
 			await Context.SaveChangesAsync();
 		}
 

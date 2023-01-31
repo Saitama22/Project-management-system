@@ -10,48 +10,79 @@ using NUnit.Framework;
 
 namespace JiraTests.RepoTests
 {
-	class ProjectRepoTest : BaseInitTest
+	class ProjectRepoTests : BaseInitTest
 	{
-		IProjectRepo _projectRepo;
+		public IProjectRepo ProjectRepo { get; set; }
+
 		[SetUp]
-		public async Task Init()
+		public void Init()
 		{
-			_projectRepo = GetService<IProjectRepo>();
+			ProjectRepo = GetService<IProjectRepo>();
 		}
+
+		public void Init(IProjectRepo projectRepo)
+		{
+			ProjectRepo = projectRepo;
+		}
+
 		[Test]
 		public async Task CreateAndDeleteProjectAsync()
-		{
+		{			
 			//Created
-			var projectNameOld = Guid.NewGuid().ToString();
-			await _projectRepo.CreateOrUpdateAsync(new Project()
-			{
-				Name = projectNameOld,
-			});
-			var resultRecord = await _projectRepo.Records.FirstOrDefaultAsync(r => r.Name == projectNameOld);
-			Assert.NotNull(resultRecord);
-			Assert.AreEqual(resultRecord.Name, projectNameOld);
+			var resultRecord = await Create();
+			var resultRecordName = resultRecord.Name;
 
-			//GetByID
-			var resultRecordById = await _projectRepo.GetByIdAsync(resultRecord.Id);
+			//Read
+			var resultRecordById = await Get(resultRecord.Id);
 			Assert.NotNull(resultRecordById);
-			Assert.AreEqual(resultRecordById.Name, projectNameOld);
+			Assert.AreEqual(resultRecordById.Name, resultRecordName);
 
 			//Update
-			var projectNameUpdated = Guid.NewGuid().ToString();
-			resultRecordById.Name = projectNameUpdated;
-			Assert.AreNotEqual(projectNameUpdated, projectNameOld);
-			await _projectRepo.CreateOrUpdateAsync(resultRecordById);
-
-			//GetByID Old
-			var resultRecordOldName = await _projectRepo.Records.FirstOrDefaultAsync(r => r.Name == projectNameOld);
-			Assert.Null(resultRecordOldName);
-			var resultRecordNewName = await _projectRepo.Records.FirstOrDefaultAsync(r => r.Name == projectNameUpdated);
-			Assert.NotNull(resultRecordNewName);
-			Assert.AreEqual(resultRecordNewName.Id, resultRecord.Id);
+			await Update(resultRecordById);
 
 			//Delete
-			await _projectRepo.DeleteByIdAsync(resultRecordNewName.Id);
-			Assert.Null(await _projectRepo.GetByIdAsync(resultRecordNewName.Id));
+			await Delete(resultRecordById);
+		}
+
+		public async Task<Project> Create(string name = null)
+		{
+			var projectName = name ?? Guid.NewGuid().ToString();
+			await ProjectRepo.CreateOrUpdateAsync(new Project()
+			{
+				Name = projectName,
+			});
+			var resultRecord = await ProjectRepo.Records.FirstOrDefaultAsync(r => r.Name == projectName);
+			Assert.NotNull(resultRecord);
+			Assert.AreEqual(resultRecord.Name, projectName);
+			return resultRecord;
+		}
+
+		public async Task<Project> Get(int id)
+		{
+			var resultRecord = await ProjectRepo.GetByIdAsync(id);
+			return resultRecord;
+		}
+
+		public async Task Update(Project project, string name = null)
+		{
+			var projectNameOld = project.Name;
+			var projectNameUpdated = Guid.NewGuid().ToString();
+			Assert.AreNotEqual(projectNameUpdated, project.Name);
+			project.Name = projectNameUpdated;
+			await ProjectRepo.CreateOrUpdateAsync(project);
+
+			var resultRecordOldName = await ProjectRepo.Records.FirstOrDefaultAsync(r => r.Name == projectNameOld);
+			Assert.Null(resultRecordOldName);
+
+			var resultRecordNewName = await ProjectRepo.Records.FirstOrDefaultAsync(r => r.Name == projectNameUpdated);
+			Assert.NotNull(resultRecordNewName);
+			Assert.AreEqual(resultRecordNewName.Id, project.Id);
+		}
+
+		private async Task Delete(Project project)
+		{
+			await ProjectRepo.DeleteByIdAsync(project.Id);
+			Assert.Null(await ProjectRepo.GetByIdAsync(project.Id));
 		}
 	}
 }

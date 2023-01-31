@@ -12,7 +12,7 @@ namespace JiraTests.Fake
 	{
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=JiraTestDb;Trusted_Connection=True;");
+			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=JiraTestDb;Trusted_Connection=True");
 		}
 	}
 }

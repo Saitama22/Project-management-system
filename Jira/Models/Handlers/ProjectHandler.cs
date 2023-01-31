@@ -33,7 +33,7 @@ namespace Jira.Models.Handlers
 
 		public IQueryable<Project> GetAllProjects()
 		{
-			return _projectRepo.Records ?? new List<Project>().AsQueryable();
+			return _projectRepo.Records.ToList().AsQueryable() ?? new List<Project>().AsQueryable();
 		}
 
 		public async Task<Project> GetProjectAsync(int projectId)
@@ -56,6 +56,16 @@ namespace Jira.Models.Handlers
 		{
 			var taskState = await _taskStateRepo.GetByIdAsync(taskStateId);
 			return (await _projectRepo.GetByIdAsync(taskState.Project.Id)).Id;
+		}
+
+		public async Task DeleteProject(int id)
+		{
+			await _projectRepo.DeleteByIdAsync(id);
+		}
+
+		public async Task DeleteProject(Project project)
+		{
+			await _projectRepo.DeleteAsync(project);
 		}
 	}
 }
