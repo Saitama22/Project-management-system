@@ -51,7 +51,7 @@ namespace JiraTests.RepoTests
 			{
 				Name = projectName,
 			});
-			var resultRecord = await ProjectRepo.Records.FirstOrDefaultAsync(r => r.Name == projectName);
+			var resultRecord = ProjectRepo.Records.FirstOrDefault(r => r.Name == projectName);
 			Assert.NotNull(resultRecord);
 			Assert.AreEqual(resultRecord.Name, projectName);
 			return resultRecord;

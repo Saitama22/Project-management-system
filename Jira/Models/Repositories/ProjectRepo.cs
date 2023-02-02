@@ -21,5 +21,12 @@ namespace Jira.Models.Repositories
 		{
 			return await MainDbSet.Include(r => r.TaskStates).ThenInclude(r => r.TasksJira).FirstOrDefaultAsync(r => r.Id == id);
 		}
+
+		protected override bool WithIncludeEntity(Project entity)
+		{
+			if (entity.TaskStates == null)
+				return false;
+			return true;
+		}
 	}
 }

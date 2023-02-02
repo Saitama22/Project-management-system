@@ -52,12 +52,16 @@ namespace Jira.Models.Repositories
 
 		public async Task DeleteAsync(T entity)
 		{
-			//await Task.Run(() => MainDbSet.Remove(entity));
+			if (!WithIncludeEntity(entity))
+				entity = await GetByIdAsync(entity.Id);
 			MainDbSet.Remove(entity);
 			
-			
-			
 			await Context.SaveChangesAsync();
+		}
+
+		protected virtual bool WithIncludeEntity(T entity)
+		{
+			return true;
 		}
 
 		public virtual async Task<T> GetByIdAsync(int id)

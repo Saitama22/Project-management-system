@@ -32,7 +32,7 @@ namespace JiraTests.HandlersTests
 
 			await CreateTest();
 		}
-
+			
 		public async Task CreateTest()
 		{
 			var projectName = Guid.NewGuid().ToString();
